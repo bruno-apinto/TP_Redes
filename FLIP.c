@@ -58,7 +58,7 @@ void Addr2Str (const struct sockaddr *addr, char *str, size_t strsize){
 
         version = 4;
         struct sockaddr_in *addr4 = (struct sockaddr_in *) addr;
-        if (inet_ntop(AF_INET, &(addr4->sin_addr), addrstr, INET6_ADDRSTRLEN+1)){
+        if (!inet_ntop(AF_INET, &(addr4->sin_addr), addrstr, INET6_ADDRSTRLEN+1)){
             LogExit("Addr2Str/ntop4");
         }
 
@@ -69,7 +69,7 @@ void Addr2Str (const struct sockaddr *addr, char *str, size_t strsize){
     else if (addr->sa_family == AF_INET6){
         version = 6;
         struct sockaddr_in *addr6 = (struct sockaddr_in *) addr;
-        if (inet_ntop(AF_INET, &(addr6->sin_addr), addrstr, INET6_ADDRSTRLEN+1)){
+        if (!inet_ntop(AF_INET, &(addr6->sin_addr), addrstr, INET6_ADDRSTRLEN+1)){
             LogExit("Addr2Str/ntop6");
         }
 
@@ -90,6 +90,9 @@ int ServerSockaddrInit(const char *proto, const char *portstr,
                     struct sockaddr_storage *storage){
     
     uint16_t port = (uint16_t) atoi(portstr);
+
+    printf ("porta: %d\n", port);
+    printf("protocolo: %s\n", proto);
 
     if (port == 0) {
         return -1;
