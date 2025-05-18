@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #include "../include/FLIP.h"
 
@@ -12,14 +13,10 @@
 
 void Usage (int argc, char** argv){
     printf ("Usage: %s <Server IP> <Server PORT>", argv[0]);
-    printf ("Example: %s 127.0.0.1 51511");
+    printf ("Example: %s 127.0.0.1 51511", argv[0]);
     exit(EXIT_FAILURE);
 }
 
-void LogExit (const char* msg){
-    perror(msg);
-    exit(EXIT_FAILURE);
-}
 
 int main (int argc, char** argv){
 
@@ -28,8 +25,10 @@ int main (int argc, char** argv){
     }
 
     // Criando estrutura do socket addr
-    char IP_ADDR[] = argv[1];
-    char PORT[] = argv[2];
+    char IP_ADDR[13];
+    strcpy(IP_ADDR, argv[1]);
+    char PORT[10];
+    strcpy(PORT, argv[2]);
 
     struct sockaddr_storage storage;
     if (0 != AddrParse(IP_ADDR, PORT, &storage)){
@@ -51,7 +50,7 @@ int main (int argc, char** argv){
     }
 
     char AddrStr[BUFFER_SIZE];
-    Addr2String(addr, AddrStr, BUFFER_SIZE);
+    Addr2Str(addr, AddrStr, BUFFER_SIZE);
     printf("Connected to: %s", AddrStr);
 
     // Comunicação

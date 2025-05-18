@@ -85,6 +85,7 @@ void Addr2Str (const struct sockaddr *addr, char *str, size_t strsize){
         snprintf(str, strsize, "IPv%d %s %hu", version, addrstr, port);
     }
 }
+
 int ServerSockaddrInit(const char *proto, const char *portstr, 
                     struct sockaddr_storage *storage){
     
@@ -117,4 +118,9 @@ int ServerSockaddrInit(const char *proto, const char *portstr,
         return -1;
     }
     return 0;
+}
+
+void LogExit (const char* msg){
+    perror(msg);
+    exit(EXIT_FAILURE);
 }
