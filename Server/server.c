@@ -84,14 +84,15 @@ int main(int argc, char** argv){
 
         //Recebendo mensagem
         size_t count = recv(csock, Buffer_Receive, BUFFER_SIZE, 0);
-        printf("[MSG] %s, %d bytes: %i", caddrstr, (int) count, BUFFER_SIZE);
+        printf("[MSG] %s, %d bytes: %s\n", caddrstr, (int) count, Buffer_Receive);
     
         //Enviando mensagem
         sprintf(Buffer_Send, "Remote endpoint: %.1000s\n", caddrstr);
         count = send(csock, Buffer_Send, strlen(Buffer_Send)+1, 0);
-        if (count != strlen(Buffer_Send)){
+        /* if (count == strlen(Buffer_Send)){
             LogExit("Send");
-        }
+        }*/
+
         
         close(csock);
     }

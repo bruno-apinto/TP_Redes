@@ -12,23 +12,28 @@
 #define BUFFER_SIZE 1024
 
 void Usage (int argc, char** argv){
-    printf ("Usage: %s <Server IP> <Server PORT>", argv[0]);
-    printf ("Example: %s 127.0.0.1 51511", argv[0]);
+    printf ("Usage: %s <Server IP> <Server PORT>\n", argv[0]);
+    printf ("Example: %s 127.0.0.1 51511\n", argv[0]);
     exit(EXIT_FAILURE);
 }
 
-
 int main (int argc, char** argv){
+
+    printf ("0\n");
 
     if (argc < 3){
         Usage(argc, argv);
     }
+
+    printf("passou 1\n");
 
     // Criando estrutura do socket addr
     char IP_ADDR[13];
     strcpy(IP_ADDR, argv[1]);
     char PORT[10];
     strcpy(PORT, argv[2]);
+
+    printf ("Passou 2\n");
 
     struct sockaddr_storage storage;
     if (0 != AddrParse(IP_ADDR, PORT, &storage)){
@@ -42,6 +47,8 @@ int main (int argc, char** argv){
         LogExit("Socket");
     }
 
+    printf("Passou 3\n");
+
     // Tentando conexão
     struct sockaddr *addr = (struct sockaddr*) &storage;
     
@@ -51,7 +58,7 @@ int main (int argc, char** argv){
 
     char AddrStr[BUFFER_SIZE];
     Addr2Str(addr, AddrStr, BUFFER_SIZE);
-    printf("Connected to: %s", AddrStr);
+    printf("Connected to: %s\n", AddrStr);
 
     // Comunicação
     char Buffer_Receive[BUFFER_SIZE];
@@ -85,7 +92,7 @@ int main (int argc, char** argv){
         total += count;
     }
 
-    printf ("Received: %u bytes", total);
+    printf ("Received: %u bytes\n", total);
     puts(Buffer_Receive);
     close(s);
 
