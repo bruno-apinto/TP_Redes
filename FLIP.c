@@ -127,3 +127,104 @@ void LogExit (const char* msg){
     perror(msg);
     exit(EXIT_FAILURE);
 }
+
+char *ActionProcessor(int clientChoose, int nextAction){
+
+    char MESSAGE[MSG_SIZE];
+
+    switch (nextAction)
+    {
+    case  0:
+
+        // Requisição para continuar as jogadas
+        strcpy("Deseja continuar a jogo?\n", MESSAGE);
+        return *MESSAGE;
+        break;
+    
+    case 1:
+
+        // Requisição respondida
+
+        break;
+    
+    case 2:
+
+        // Jogada recebida
+    
+    default:
+        LogExit("Action Processor");
+        break;
+    }
+}
+
+int PlayProcessor (int clientChoose){
+
+    int jogadaServidor = rand() % 4;
+
+    if (jogadaServidor == clientChoose){
+        // Empate
+        return -1;
+    }
+
+    switch (clientChoose){
+
+    case 0:
+        if (jogadaServidor == 2 || jogadaServidor == 3){
+            // Vitória
+            return 1;
+        }
+        else if (jogadaServidor == 1 || jogadaServidor == 4){
+            // Derrota
+            return 0;
+        }
+        break;
+
+    case 1:
+        if (jogadaServidor == 4 || jogadaServidor == 0){
+            // Vitória
+            return 1;
+        }
+        else if (jogadaServidor == 2 || jogadaServidor == 3){
+            // Derrota
+            return 0;
+        }
+        break;
+
+    case 2:
+        if (jogadaServidor == 1 || jogadaServidor == 3){
+            // Vitória
+            return 1;
+        }
+        else if (jogadaServidor == 0 || jogadaServidor == 4){
+            // Derrota
+            return 0;
+        }
+        break;
+    
+    case 3:
+        if (jogadaServidor == 1 || jogadaServidor == 4){
+            // Vitória
+            return 1;
+        }
+        else if (jogadaServidor == 0 || jogadaServidor == 2){
+            // Derrota
+            return 0;
+        }
+        break;
+    
+    case 4:
+        if (jogadaServidor == 0 || jogadaServidor == 2){
+            // Vitória
+            return 1;
+        }
+        else if (jogadaServidor == 1 || jogadaServidor == 3){
+            // Derrota
+            return 0;
+        }
+        break;
+
+    default:
+        break;
+    }
+
+}
