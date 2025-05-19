@@ -69,4 +69,9 @@ typedef struct{
     char message[MSG_SIZE];
 } GameMessage;
 
+int ActionProcessor(int clientChoice, 
+    MessageType actualAction, GameMessage *GLOBAL);
+
+int PlayProcessor (int clientChoice);
+
 #endif
