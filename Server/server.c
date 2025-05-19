@@ -105,20 +105,23 @@ int main(int argc, char** argv){
         ActionProcessor(clientChoice, actualAction, &nextAction, &MENSAGEM);
 
         //Enviando mensagem
-        sprintf(Buffer_Send, "%s", MENSAGEM.message);
+        strcpy(Buffer_Send, MENSAGEM.message);
         send(csock, Buffer_Send, strlen(Buffer_Send)+1, 0);
+
+        if(actualAction == 6) break;
 
         //Recebendo mensagem
         size_t count = recv(csock, Buffer_Receive, BUFFER_SIZE, 0);
         //printf("[MSG] %s, %d bytes: %s\n", caddrstr, (int) count, Buffer_Receive);
         strcpy(MENSAGEM.message, Buffer_Receive);
+
+        clientChoice = atoi(MENSAGEM.message);
+
+        actualAction = nextAction;
         
         /* if (count == strlen(Buffer_Send)){
             LogExit("Send");
         }*/
-
-        
-        
     }
 
     close(csock);

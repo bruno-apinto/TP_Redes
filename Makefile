@@ -1,5 +1,5 @@
 server: 
-	gcc -o server FLIP.c Server/server.c
+	gcc -o server -c FLIP.c Server/server.c
 
 client:
-	gcc -o client FLIP.c Client/client.c 
+	gcc -o client -c FLIP.c Client/client.c 

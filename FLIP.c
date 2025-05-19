@@ -130,16 +130,20 @@ void LogExit (const char* msg){
 
 int ActionProcessor(int clientChoice, MessageType actualAction, MessageType *nextAction, GameMessage *GLOBAL){
 
+    
     switch (actualAction){
 
         case 0: //MSG_REQUEST
 
             // O jogo continua
             strcpy(GLOBAL->message, "Qual a sua jogada?\n");
+            *nextAction = 1;
             return 0;
             break;
         
         case 1: //MSG_RESPONSE
+
+            *nextAction = 2; // Vai para a página de resultado
 
             // Jogada recebida
             switch (clientChoice){
@@ -168,12 +172,20 @@ int ActionProcessor(int clientChoice, MessageType actualAction, MessageType *nex
         
             default:
             // Erro na escolha da jogada -> volta pra case 1
-            return -1;
+                return -1;
                 break;
             }
 
         case 2: //MSG_RESULT
+
             strcpy(GLOBAL->message, "Resultado da partida:\n");
+
+            if (GLOBAL->result == 0)
+                *nextAction = MSG_REQUEST;
+            
+            else 
+                *nextAction = 3;
+            
             return 0;
             break;
 
@@ -186,6 +198,7 @@ int ActionProcessor(int clientChoice, MessageType actualAction, MessageType *nex
             
         case 5: //MSG_ERROR
             strcpy(GLOBAL->message, "Erro na escolha\n");
+            *nextAction = 0;
             return 0;
             break;
         
