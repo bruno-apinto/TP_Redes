@@ -128,28 +128,53 @@ void LogExit (const char* msg){
     exit(EXIT_FAILURE);
 }
 
-char *ActionProcessor(int clientChoose, int nextAction){
+int ActionProcessor(int clientChoose, int actualAction, GameMessage *GLOBAL){
 
-    char MESSAGE[MSG_SIZE];
+    switch (actualAction){
 
-    switch (nextAction)
-    {
     case  0:
 
         // Requisição para continuar as jogadas
-        strcpy("Deseja continuar a jogo?\n", MESSAGE);
-        return *MESSAGE;
+        strcpy("Deseja continuar a jogo?\n", GLOBAL->message);
         break;
     
     case 1:
 
-        // Requisição respondida
-
+        // O jogo continua
+        strcpy("Qual a sua jogada?\n", GLOBAL->message);
         break;
     
     case 2:
 
         // Jogada recebida
+        switch (clientChoose){
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            int resultado = PlayProcessor(clientChoose);
+            GLOBAL->result = resultado;
+
+            if (resultado == 1){
+                //Vitória
+                GLOBAL->client_wins += 1;
+                strcpy("VITÓRIA\n", GLOBAL->message);
+            }
+            else if (resultado == 0){
+                strcpy("Empate\n", GLOBAL->message);
+            }
+            else if (resultado == -1){
+                GLOBAL->server_wins += 1;
+                strcpy("Derrota\n", GLOBAL->message);
+            }
+            break;
+        
+        default:
+         // Erro na escolha da jogada -> volta pra case 1
+            break;
+        }
+        
     
     default:
         LogExit("Action Processor");
