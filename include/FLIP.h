@@ -46,10 +46,10 @@ void LogExit(const char *msg);
  */
 typedef enum{
     MSG_REQUEST,
-    MSG_RESPONSE,
+    MSG_RESPONSE, // Entrada
     MSG_RESULT,
     MSG_PLAY_AGAIN_REQUEST,
-    MSG_PLAY_AGAIN_RESPONSE,
+    MSG_PLAY_AGAIN_RESPONSE, //Entrada
     MSG_ERROR,
     MSG_END
 } MessageType;

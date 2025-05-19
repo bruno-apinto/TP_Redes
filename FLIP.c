@@ -128,7 +128,7 @@ void LogExit (const char* msg){
     exit(EXIT_FAILURE);
 }
 
-int ActionProcessor(int clientChoice, MessageType actualAction, GameMessage *GLOBAL){
+int ActionProcessor(int clientChoice, MessageType actualAction, MessageType *nextAction, GameMessage *GLOBAL){
 
     switch (actualAction){
 
