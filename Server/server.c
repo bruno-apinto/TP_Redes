@@ -17,6 +17,17 @@ void Usage (int argc, char** argv){
     exit(EXIT_FAILURE);
 }
 
+void Inicializacao_Game_Message(GameMessage *GLOBAL){
+
+    GLOBAL->client_action = 0;
+    GLOBAL->client_wins = 0;
+    GLOBAL->result = 0;
+    GLOBAL->server_action = 0;
+    GLOBAL->server_wins = 0;
+    GLOBAL->type = 0;
+    strcpy(GLOBAL->message, " ");
+}
+
 int main(int argc, char** argv){
     /*if (argc < 3){
         Usage(argc, argv);
@@ -64,39 +75,53 @@ int main(int argc, char** argv){
     memset(Buffer_Receive, 0, BUFFER_SIZE);
     char Buffer_Send[BUFFER_SIZE] = "";
     memset(Buffer_Send, 0, BUFFER_SIZE);
+
+    // Variáveis da comunicação
+
+    int clientChoice = 0;
+
+    GameMessage MENSAGEM;
+    Inicializacao_Game_Message(&MENSAGEM);
+    MessageType actualAction = 0;
+    MessageType nextAction = 0;
+
+    struct sockaddr_storage cstorage;
+    struct sockaddr *caddr = (struct sockaddr*) &cstorage;
+
+    socklen_t tamanho_cstorage = sizeof(cstorage);
+    int csock = accept(s, caddr, &tamanho_cstorage);
+
+    if (-1 == csock){
+        LogExit("Accept");
+    }
+
+    char caddrstr[BUFFER_SIZE];
+    Addr2Str(addr, caddrstr, BUFFER_SIZE);
+    printf("[log] Connection from %s\n", caddrstr);
+        
     
     while(1){
+        
+        ActionProcessor(clientChoice, actualAction, &nextAction, &MENSAGEM);
 
-        struct sockaddr_storage cstorage;
-        struct sockaddr *caddr = (struct sockaddr*) &cstorage;
-
-        socklen_t tamanho_cstorage = sizeof(cstorage);
-
-        int csock = accept(s, caddr, &tamanho_cstorage);
-
-        if (-1 == csock){
-            LogExit("Accept");
-        }
-
-        char caddrstr[BUFFER_SIZE];
-        Addr2Str(addr, caddrstr, BUFFER_SIZE);
-        printf("[log] Connection from %s\n", caddrstr);
+        //Enviando mensagem
+        sprintf(Buffer_Send, "%s", MENSAGEM.message);
+        send(csock, Buffer_Send, strlen(Buffer_Send)+1, 0);
 
         //Recebendo mensagem
         size_t count = recv(csock, Buffer_Receive, BUFFER_SIZE, 0);
-        printf("[MSG] %s, %d bytes: %s\n", caddrstr, (int) count, Buffer_Receive);
-    
-        //Enviando mensagem
-        sprintf(Buffer_Send, "Remote endpoint: %.1000s\n", caddrstr);
-        count = send(csock, Buffer_Send, strlen(Buffer_Send)+1, 0);
+        //printf("[MSG] %s, %d bytes: %s\n", caddrstr, (int) count, Buffer_Receive);
+        strcpy(MENSAGEM.message, Buffer_Receive);
+        
         /* if (count == strlen(Buffer_Send)){
             LogExit("Send");
         }*/
 
         
-        close(csock);
+        
     }
 
+    close(csock);
     close(s);
 
     return 0;

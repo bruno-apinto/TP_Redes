@@ -70,7 +70,7 @@ typedef struct{
 } GameMessage;
 
 int ActionProcessor(int clientChoice, 
-    MessageType actualAction, GameMessage *GLOBAL);
+    MessageType actualAction, MessageType *nextAction, GameMessage *GLOBAL);
 
 int PlayProcessor (int clientChoice);
 
