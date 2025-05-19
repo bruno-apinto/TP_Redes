@@ -128,70 +128,89 @@ void LogExit (const char* msg){
     exit(EXIT_FAILURE);
 }
 
-int ActionProcessor(int clientChoose, int actualAction, GameMessage *GLOBAL){
+int ActionProcessor(int clientChoice, MessageType actualAction, GameMessage *GLOBAL){
 
     switch (actualAction){
 
     case  0:
 
         // Requisição para continuar as jogadas
-        strcpy("Deseja continuar a jogo?\n", GLOBAL->message);
+        strcpy(GLOBAL->message, "Deseja continuar a jogo?\n");
+        return 0;
         break;
     
     case 1:
 
         // O jogo continua
-        strcpy("Qual a sua jogada?\n", GLOBAL->message);
+        strcpy(GLOBAL->message, "Qual a sua jogada?\n");
+        return 0;
         break;
     
     case 2:
 
         // Jogada recebida
-        switch (clientChoose){
+        switch (clientChoice){
         case 0:
         case 1:
         case 2:
         case 3:
         case 4:
-            int resultado = PlayProcessor(clientChoose);
+            int resultado = PlayProcessor(clientChoice);
             GLOBAL->result = resultado;
 
             if (resultado == 1){
                 //Vitória
                 GLOBAL->client_wins += 1;
-                strcpy("VITÓRIA\n", GLOBAL->message);
+                strcpy (GLOBAL->message, "VITÓRIA\n");
             }
             else if (resultado == 0){
-                strcpy("Empate\n", GLOBAL->message);
+                strcpy(GLOBAL->message, "Empate\n");
             }
             else if (resultado == -1){
                 GLOBAL->server_wins += 1;
-                strcpy("Derrota\n", GLOBAL->message);
+                strcpy(GLOBAL->message, "Derrota\n");
             }
+            return 0;
             break;
-        
+    
         default:
          // Erro na escolha da jogada -> volta pra case 1
+        return -1;
             break;
         }
         
+    case 4:
+        // REquisição para continuar jogando
+        strcpy(GLOBAL->message, "Deseja continuar jogando?\n");
+        return 0;
+        break;
     
+    case 5:
+        strcpy(GLOBAL->message, "Erro na escolha\n");
+        return 0;
+        break;
+    
+    case 6:
+        strcpy(GLOBAL->message, "Finalização\n");
+        return 0;
+        break;
+
     default:
         LogExit("Action Processor");
         break;
     }
 }
 
-int PlayProcessor (int clientChoose){
+int PlayProcessor (int clientChoice){
 
     int jogadaServidor = rand() % 4;
 
-    if (jogadaServidor == clientChoose){
+    if (jogadaServidor == clientChoice){
         // Empate
         return -1;
     }
 
-    switch (clientChoose){
+    switch (clientChoice){
 
     case 0:
         if (jogadaServidor == 2 || jogadaServidor == 3){
