@@ -197,5 +197,5 @@ int PlayProcessor (int clientChoice){
     default:
         break;
     }
-
+    return -1;
 }

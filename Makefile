@@ -1,5 +1,9 @@
+all:
+	gcc -Wall FLIP.c Server/server.c -o server
+	gcc -Wall FLIP.c Client/client.c -o client
+
 server: 
-	gcc FLIP.c Server/server.c -o server
+	gcc -Wall FLIP.c Server/server.c -o server
 
 client:
-	gcc FLIP.c Client/client.c -o client
+	gcc -Wall FLIP.c Client/client.c -o client

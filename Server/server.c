@@ -126,7 +126,7 @@ int main(int argc, char **argv)
             // O jogo continua/começa
             strcpy(GLOBAL.message, "Qual a sua jogada?\n");
 
-            send(csock, GLOBAL.message, strlen(GLOBAL.message), 0);
+            send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
             nextAction = MSG_RESPONSE;
 
@@ -138,8 +138,9 @@ int main(int argc, char **argv)
 
             nextAction = MSG_RESULT; // Vai para a página de resultado
 
-            recv (csock, GLOBAL.message, MSG_SIZE, 0);
+            recv (csock, GLOBAL.message, MSG_SIZE-1, 0);
             clientChoice = atoi(GLOBAL.message);
+            printf ("O cliente escoheu: %d\n", clientChoice);
 
             // Jogada recebida
             switch (clientChoice)
@@ -168,7 +169,7 @@ int main(int argc, char **argv)
                     strcpy(GLOBAL.message, "Resultado da partida: Derrota\n");
                 }
                 
-                send(csock, GLOBAL.message, strlen(GLOBAL.message), 0);
+                send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
                 
                 break;
 
@@ -177,6 +178,7 @@ int main(int argc, char **argv)
                 nextAction = MSG_ERROR;
                 break;
             }
+            break;
 
         case 2: // MSG_RESULT
 
@@ -192,7 +194,7 @@ int main(int argc, char **argv)
             // Requisição para continuar as jogadas
             strcpy(GLOBAL.message, "Deseja continuar a jogo?\n");
 
-            send(csock, GLOBAL.message, strlen(GLOBAL.message), 0);
+            send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
             recv(csock, GLOBAL.message, MSG_SIZE, 0);
 
@@ -205,12 +207,14 @@ int main(int argc, char **argv)
 
         case 5: // MSG_ERROR
             strcpy(GLOBAL.message, "Erro na escolha\n");
+            send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
             nextAction = 0;
 
             break;
 
         case 6: // MSG_END
             strcpy(GLOBAL.message, "Finalização\n");
+            send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
             final = 1;
 
