@@ -68,22 +68,30 @@ int main (int argc, char** argv){
     memset(Buffer_Send, 0, BUFFER_SIZE);
 
     printf("msg> ");
-    fgets(Buffer_Send, BUFFER_SIZE-1, stdin);
+    scanf(" %s", Buffer_Send);
 
     int count;
     count = send(s, Buffer_Send, strlen(Buffer_Send)+1, 0);
+
+    printf("passou\n");
 
     if (count != strlen(Buffer_Send)+1){
         LogExit("First send");
     }
 
+    printf("passou 2\n");
     memset(Buffer_Send, 0, BUFFER_SIZE); //Limpando o buffer
 
     unsigned total = 0; // Para garantir que a mensagem seja recebida por completo
 
+    printf("passou 3\n");
+
     while(1){
 
+        printf("entrou no loop\n");
         count = recv(s, Buffer_Receive + total, BUFFER_SIZE - total, 0);
+
+        printf(" %s", Buffer_Receive);
         if (count == 0){
             // Fim da Conexão
             break;
