@@ -132,6 +132,8 @@ int PlayProcessor (int clientChoice){
 
     int jogadaServidor = rand() % 4;
 
+    printf("Servidor escolheu: %d\n", jogadaServidor);
+
     if (jogadaServidor == clientChoice){
         // Empate
         return -1;

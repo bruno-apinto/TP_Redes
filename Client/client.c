@@ -81,7 +81,7 @@ int main (int argc, char** argv){
 
     while(1){
 
-        printf("entrou no loop\n");
+        //printf("entrou no loop\n");
 
         recv(s, Buffer_Receive, BUFFER_SIZE, 0);
 

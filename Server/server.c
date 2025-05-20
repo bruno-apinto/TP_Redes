@@ -9,7 +9,7 @@
 
 #include "../include/FLIP.h"
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE MSG_SIZE
 
 void Usage(int argc, char **argv)
 {
@@ -113,7 +113,6 @@ int main(int argc, char **argv)
 
     while (1)
     {
-
         actualAction = nextAction;
 
         switch (actualAction)
@@ -121,26 +120,17 @@ int main(int argc, char **argv)
 
         case 0: // MSG_REQUEST
 
-            printf("entrou no switch case 0\n");
+            printf("MSG_REQUEST\n");
 
             // O jogo continua/começa
-            strcpy(GLOBAL.message, "Qual a sua jogada?\n");
-
+            strcat(GLOBAL.message, "Qual a sua jogada?\n");
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
-            nextAction = MSG_RESPONSE;
+            printf("MSG_RESPONSE\n");
 
-            break;
-
-        case 1: // MSG_RESPONSE
-
-            printf("Entrou no case 1\n");
-
-            nextAction = MSG_RESULT; // Vai para a página de resultado
-
-            recv (csock, GLOBAL.message, MSG_SIZE-1, 0);
-            clientChoice = atoi(GLOBAL.message);
-            printf ("O cliente escoheu: %d\n", clientChoice);
+            recv (csock, Buffer_Receive, MSG_SIZE-1, 0);
+            clientChoice = atoi(Buffer_Receive);
+            printf ("Cliente escoheu: %d\n", clientChoice);
 
             // Jogada recebida
             switch (clientChoice)
@@ -168,8 +158,11 @@ int main(int argc, char **argv)
                     GLOBAL.server_wins += 1;
                     strcpy(GLOBAL.message, "Resultado da partida: Derrota\n");
                 }
-                
-                send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
+                else {
+                    strcpy(GLOBAL.message, "Erro ao processar partida\n");
+                }
+
+                nextAction = MSG_RESULT;
                 
                 break;
 
@@ -182,30 +175,44 @@ int main(int argc, char **argv)
 
         case 2: // MSG_RESULT
 
-            if (GLOBAL.result == 0)
-                nextAction = MSG_REQUEST;
+            printf("MSG_RESULT\n");
+            //send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
-            else
-                nextAction = 3;
+            if (GLOBAL.result == 0){
+                //recv(csock, Buffer_Receive, BUFFER_SIZE+1, 0);
+                nextAction = MSG_REQUEST;
+            }
+
+            else{
+                nextAction = MSG_PLAY_AGAIN_REQUEST;
+                //recv(csock, Buffer_Receive, BUFFER_SIZE+1, 0);
+            }
             break;
 
         case 3: // MSG_PLAY_AGAIN_REQUEST
 
+            printf("MSG_PLAY_AGAIN_REQUEST\n");
+
             // Requisição para continuar as jogadas
-            strcpy(GLOBAL.message, "Deseja continuar a jogo?\n");
+            strcat(GLOBAL.message, "Deseja continuar a jogo?\n");
 
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
-            recv(csock, GLOBAL.message, MSG_SIZE, 0);
+            recv(csock, Buffer_Receive, MSG_SIZE-1, 0);
 
-            clientChoice = atoi(GLOBAL.message);
+            clientChoice = atoi(Buffer_Receive);
+
+            printf("Cliente decidiu continuar: %d\n", clientChoice);
 
             if (clientChoice == 1) nextAction = MSG_REQUEST;
             else if (clientChoice == 0) nextAction = MSG_END;
+            else nextAction = MSG_ERROR;
 
             break;
 
         case 5: // MSG_ERROR
+
+            printf("MSG_ERROR\n");
             strcpy(GLOBAL.message, "Erro na escolha\n");
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
             nextAction = 0;
@@ -213,6 +220,8 @@ int main(int argc, char **argv)
             break;
 
         case 6: // MSG_END
+
+            printf("MSG_END\n");
             strcpy(GLOBAL.message, "Finalização\n");
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
