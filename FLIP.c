@@ -128,15 +128,16 @@ void LogExit (const char* msg){
     exit(EXIT_FAILURE);
 }
 
-int PlayProcessor (int clientChoice){
+int PlayProcessor (int clientChoice, int jogadaServidor){
 
-    int jogadaServidor = rand() % 4;
+    
 
     printf("Servidor escolheu: %d\n", jogadaServidor);
+    printf ("Cliente escoheu: %d\n", clientChoice);
 
     if (jogadaServidor == clientChoice){
         // Empate
-        return -1;
+        return 0;
     }
 
     switch (clientChoice){
@@ -148,7 +149,7 @@ int PlayProcessor (int clientChoice){
         }
         else if (jogadaServidor == 1 || jogadaServidor == 4){
             // Derrota
-            return 0;
+            return -1;
         }
         break;
 
@@ -159,7 +160,7 @@ int PlayProcessor (int clientChoice){
         }
         else if (jogadaServidor == 2 || jogadaServidor == 3){
             // Derrota
-            return 0;
+            return -1;
         }
         break;
 
@@ -170,7 +171,7 @@ int PlayProcessor (int clientChoice){
         }
         else if (jogadaServidor == 0 || jogadaServidor == 4){
             // Derrota
-            return 0;
+            return -1;
         }
         break;
     
@@ -181,7 +182,7 @@ int PlayProcessor (int clientChoice){
         }
         else if (jogadaServidor == 0 || jogadaServidor == 2){
             // Derrota
-            return 0;
+            return -1;
         }
         break;
     
@@ -192,12 +193,12 @@ int PlayProcessor (int clientChoice){
         }
         else if (jogadaServidor == 1 || jogadaServidor == 3){
             // Derrota
-            return 0;
+            return -1;
         }
         break;
 
     default:
         break;
     }
-    return -1;
+    return 0;
 }

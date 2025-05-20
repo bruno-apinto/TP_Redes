@@ -72,6 +72,6 @@ typedef struct{
 int ActionProcessor(int clientChoice, 
     MessageType actualAction, MessageType *nextAction, GameMessage *GLOBAL);
 
-int PlayProcessor (int clientChoice);
+int PlayProcessor (int clientChoice, int jogadaServidor);
 
 #endif

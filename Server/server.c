@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
             recv (csock, Buffer_Receive, MSG_SIZE-1, 0);
             clientChoice = atoi(Buffer_Receive);
-            printf ("Cliente escoheu: %d\n", clientChoice);
+            //printf ("Cliente escoheu: %d\n", clientChoice);
 
             // Jogada recebida
             switch (clientChoice)
@@ -141,23 +141,25 @@ int main(int argc, char **argv)
             case 2:
             case 3:
             case 4:
-                int resultado = PlayProcessor(clientChoice);
+                int serverChoice = rand() % 4;
+                int resultado = PlayProcessor(clientChoice, serverChoice);
                 GLOBAL.result = resultado;
 
                 if (resultado == 1)
                 {
                     // Vitória
                     GLOBAL.client_wins += 1;
-                    strcpy(GLOBAL.message, "Resultado da partida: Vitória\n");
+                    //strcpy(GLOBAL.message, "Resultado: Vitória!\n");
+                    sprintf(GLOBAL.message, "Cliente escolheu: %d\nServidor escolheu: %d\nResultado: Vitória!\n", clientChoice, serverChoice);
                 }
                 else if (resultado == 0)
                 {
-                    strcpy(GLOBAL.message, "Resultado da partida: Empate\n");
+                    strcpy(GLOBAL.message, "Resultado: Empate!\n");
                 }
                 else if (resultado == -1)
                 {
                     GLOBAL.server_wins += 1;
-                    strcpy(GLOBAL.message, "Resultado da partida: Derrota\n");
+                    strcpy(GLOBAL.message, "Resultado: Derrota!\n");
                 }
                 else {
                     origem_error = MSG_REQUEST;
