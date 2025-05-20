@@ -110,6 +110,7 @@ int main(int argc, char **argv)
     printf("[log] Connection from %s\n", caddrstr);
 
     int final = 0; // Define o final da conexão
+    MessageType origem_error = MSG_REQUEST;
 
     while (1)
     {
@@ -159,6 +160,7 @@ int main(int argc, char **argv)
                     strcpy(GLOBAL.message, "Resultado da partida: Derrota\n");
                 }
                 else {
+                    origem_error = MSG_REQUEST;
                     strcpy(GLOBAL.message, "Erro ao processar partida\n");
                 }
 
@@ -168,6 +170,7 @@ int main(int argc, char **argv)
 
             default:
                 // Erro na escolha da jogada -> volta pra case 1
+                origem_error = MSG_RESPONSE;
                 nextAction = MSG_ERROR;
                 break;
             }
@@ -183,7 +186,7 @@ int main(int argc, char **argv)
                 nextAction = MSG_REQUEST;
             }
 
-            else{
+            else {
                 nextAction = MSG_PLAY_AGAIN_REQUEST;
                 //recv(csock, Buffer_Receive, BUFFER_SIZE+1, 0);
             }
@@ -204,9 +207,15 @@ int main(int argc, char **argv)
 
             printf("Cliente decidiu continuar: %d\n", clientChoice);
 
-            if (clientChoice == 1) nextAction = MSG_REQUEST;
+            if (clientChoice == 1) {
+                nextAction = MSG_REQUEST;
+                GLOBAL.message[0] = '\0';
+            }
             else if (clientChoice == 0) nextAction = MSG_END;
-            else nextAction = MSG_ERROR;
+            else {
+                nextAction = MSG_ERROR;
+                origem_error = MSG_PLAY_AGAIN_RESPONSE;
+            }
 
             break;
 
@@ -214,8 +223,19 @@ int main(int argc, char **argv)
 
             printf("MSG_ERROR\n");
             strcpy(GLOBAL.message, "Erro na escolha\n");
-            send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
-            nextAction = 0;
+            //send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
+
+            if (origem_error == MSG_PLAY_AGAIN_RESPONSE){
+                nextAction = MSG_PLAY_AGAIN_REQUEST;
+            }
+            else if (origem_error == MSG_RESPONSE){
+                nextAction = MSG_REQUEST;
+            }
+            
+            else {
+                printf ("Erro não tratado: %d\n", origem_error);
+                nextAction = MSG_REQUEST;
+            }
 
             break;
 
