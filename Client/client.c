@@ -79,15 +79,14 @@ int main (int argc, char** argv){
 
     //printf("passou 2\n");
 
-
     while(1){
 
         //printf("entrou no loop\n");
 
         recv(s, Buffer_Receive, BUFFER_SIZE, 0);
 
-            if (!strcmp(Buffer_Receive, "Finalização\n")) break;
-        printf(" %s", Buffer_Receive);
+        //if (!strcmp(Buffer_Receive, "Finalização\n")) break;
+        puts(Buffer_Receive);
 
         fgets(Buffer_Send, BUFFER_SIZE, stdin);
         send(s, Buffer_Send, strlen(Buffer_Send)+1, 0);
