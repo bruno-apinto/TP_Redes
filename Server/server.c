@@ -87,8 +87,9 @@ int main(int argc, char **argv)
     char Buffer_Send[BUFFER_SIZE] = "";
     memset(Buffer_Send, 0, BUFFER_SIZE);
 
-    
-    while(1){
+    // Loop do servidor
+
+    while(1){ 
 
             // Variáveis da comunicação
 
@@ -218,7 +219,7 @@ int main(int argc, char **argv)
                     printf("Perguntando se o cliente deseja jogar novamente.\n");
 
                     // Requisição para continuar as jogadas
-                    strcat(GLOBAL.message, "Deseja jogar novamente?\n1 - Sim\n0 - Não\n\n");
+                    strcat(GLOBAL.message, "Deseja jogar novamente?\n1 - Sim\n0 - Não\n");
 
                     send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
@@ -273,6 +274,9 @@ int main(int argc, char **argv)
                     printf("Enviando placar final.\n");
                     sprintf(GLOBAL.message, "\nFim de jogo!\nPlacar final: Você %d x %d Servidor\nObrigado por jogar!\n", GLOBAL.client_wins, GLOBAL.server_wins);
                     send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
+
+                    //sprintf(GLOBAL.message, "Placar final: Você %d x %d Servidor\nObrigado por jogar!\n", GLOBAL.client_wins, GLOBAL.server_wins);
+                    //send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
                     final = 1;
 

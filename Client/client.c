@@ -83,9 +83,10 @@ int main (int argc, char** argv){
 
         //printf("entrou no loop\n");
 
-        recv(s, Buffer_Receive, BUFFER_SIZE, 0);
+        recv(s, Buffer_Receive, BUFFER_SIZE-1, 0);
 
-        //if (!strcmp(Buffer_Receive, "Finalização\n")) break;
+            if (!memcmp(Buffer_Receive, "\nFim de jogo!\n", 14)) break;
+            
         puts(Buffer_Receive);
 
         fgets(Buffer_Send, BUFFER_SIZE, stdin);
