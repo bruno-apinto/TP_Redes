@@ -25,7 +25,7 @@ void Addr2Str(const struct sockaddr *addr, char *str, size_t strsize);
  * @brief Inicializador do servidor
  *
  * @param proto Protocolo utilizado, IPv4 ou Ipv6
- * @param portstr POrta utilizada
+ * @param portstr Porta utilizada
  * @param storage Interface utilizada
  * @return int sucesso da operação
  */
@@ -68,9 +68,6 @@ typedef struct{
     int server_wins;
     char message[MSG_SIZE];
 } GameMessage;
-
-int ActionProcessor(int clientChoice, 
-    MessageType actualAction, MessageType *nextAction, GameMessage *GLOBAL);
 
 int PlayProcessor (int clientChoice, int jogadaServidor);
 

@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 
-#include "include/FLIP.h"
+#include "../include/FLIP.h"
 
 int AddrParse(const char *addrstr, const char *portstr, 
             struct sockaddr_storage *storage){
