@@ -11,6 +11,8 @@
 
 #define BUFFER_SIZE MSG_SIZE
 
+char ATTACK_TYPES[5][17] = {"Nuclear Attack", "Intercept Attack", "Cyber Attack", "Drone Attack", "Bio Attack"};
+
 void Usage(int argc, char **argv)
 {
     printf("Usage: %s <v4|v6> <Server PORT>\n", argv[0]);
@@ -36,7 +38,7 @@ int main(int argc, char **argv)
         Usage(argc, argv);
     }*/
 
-    printf("passou 1\n");
+    //printf("passou 1\n");
     // Inicializando a interface
     char IP_Type[4];
     char PORT[10];
@@ -47,11 +49,11 @@ int main(int argc, char **argv)
 
     if (0 != ServerSockaddrInit(IP_Type, PORT, &storage))
     {
-        printf("erro aqui\n");
+        //printf("erro aqui\n");
         Usage(argc, argv);
     };
 
-    printf("passou 2\n");
+    //printf("passou 2\n");
 
     // Criação do socket
     int s;
@@ -76,7 +78,9 @@ int main(int argc, char **argv)
 
     char addrstr[BUFFER_SIZE];
     Addr2Str(addr, addrstr, BUFFER_SIZE);
-    printf("Bound to %s, waiting connection\n", addrstr);
+    
+    printf("Servidor iniciado em modo IP%s na porta %s. Aguardando conexão...\n", IP_Type, PORT);
+    //printf("Bound to %s, waiting connection\n", addrstr);
 
     char Buffer_Receive[BUFFER_SIZE] = "";
     memset(Buffer_Receive, 0, BUFFER_SIZE);
@@ -107,7 +111,8 @@ int main(int argc, char **argv)
 
     char caddrstr[BUFFER_SIZE];
     Addr2Str(addr, caddrstr, BUFFER_SIZE);
-    printf("[log] Connection from %s\n", caddrstr);
+    printf("Cliente conectado.");
+    //printf("[log] Connection from %s\n", caddrstr);
 
     int final = 0; // Define o final da conexão
     MessageType origem_error = MSG_REQUEST;
@@ -124,7 +129,7 @@ int main(int argc, char **argv)
             printf("MSG_REQUEST\n");
 
             // O jogo continua/começa
-            strcat(GLOBAL.message, "Qual a sua jogada?\n");
+            strcat(GLOBAL.message, "\nEscolha a sua jogada:\n\n0 - Nuclear Attack\n1 - Intercept Attack\n2 - Cyber Attack\n3 - Drone Strike\n4 - Bio Attack\n\n");
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
             printf("MSG_RESPONSE\n");
@@ -150,16 +155,21 @@ int main(int argc, char **argv)
                     // Vitória
                     GLOBAL.client_wins += 1;
                     //strcpy(GLOBAL.message, "Resultado: Vitória!\n");
-                    sprintf(GLOBAL.message, "Cliente escolheu: %d\nServidor escolheu: %d\nResultado: Vitória!\n", clientChoice, serverChoice);
+                    sprintf(GLOBAL.message, "\nVocê escolheu: %s\nServidor escolheu: %s\nResultado: Vitória!\n\n", 
+                                                            ATTACK_TYPES[clientChoice], ATTACK_TYPES[serverChoice]);
                 }
                 else if (resultado == 0)
                 {
-                    strcpy(GLOBAL.message, "Resultado: Empate!\n");
+                    //strcpy(GLOBAL.message, "Resultado: Empate!\n");
+                    sprintf(GLOBAL.message, "\nVocê escolheu: %s\nServidor escolheu: %s\nResultado: Empate!\n\n", 
+                                                            ATTACK_TYPES[clientChoice], ATTACK_TYPES[serverChoice]);
                 }
                 else if (resultado == -1)
                 {
                     GLOBAL.server_wins += 1;
-                    strcpy(GLOBAL.message, "Resultado: Derrota!\n");
+                    //strcpy(GLOBAL.message, "Resultado: Derrota!\n");
+                    sprintf(GLOBAL.message, "\nVocê escolheu: %s\nServidor escolheu: %s\nResultado: Derrota!\n\n", 
+                                                            ATTACK_TYPES[clientChoice], ATTACK_TYPES[serverChoice]);
                 }
                 else {
                     origem_error = MSG_REQUEST;
@@ -199,7 +209,7 @@ int main(int argc, char **argv)
             printf("MSG_PLAY_AGAIN_REQUEST\n");
 
             // Requisição para continuar as jogadas
-            strcat(GLOBAL.message, "Deseja continuar a jogo?\n");
+            strcat(GLOBAL.message, "Deseja jogar novamente?\n1 - Sim\n0 - Não\n\n");
 
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
@@ -224,13 +234,15 @@ int main(int argc, char **argv)
         case 5: // MSG_ERROR
 
             printf("MSG_ERROR\n");
-            strcpy(GLOBAL.message, "Erro na escolha\n");
+            //strcpy(GLOBAL.message, "\nErro na escolha\n");
             //send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
             if (origem_error == MSG_PLAY_AGAIN_RESPONSE){
+                strcpy(GLOBAL.message, "\nPor favor, digite 1 para jogar novamente ou 0 para encerrar.\n");
                 nextAction = MSG_PLAY_AGAIN_REQUEST;
             }
             else if (origem_error == MSG_RESPONSE){
+                strcpy(GLOBAL.message, "\nPor favor, selecione um valor de 0 a 4.\n");
                 nextAction = MSG_REQUEST;
             }
             
@@ -244,7 +256,7 @@ int main(int argc, char **argv)
         case 6: // MSG_END
 
             printf("MSG_END\n");
-            strcpy(GLOBAL.message, "Finalização\n");
+            sprintf(GLOBAL.message, "\nFim de jogo!\nPlacar final: Você %d x %d Servidor\nObrigado por jogar!\n", GLOBAL.client_wins, GLOBAL.server_wins);
             send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
             final = 1;
