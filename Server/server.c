@@ -134,7 +134,7 @@ int main(int argc, char **argv)
                     printf("Apresentando as opções para o cliente.\n");
 
                     // O jogo continua/começa
-                    strcat(GLOBAL.message, "\nEscolha a sua jogada:\n\n0 - Nuclear Attack\n1 - Intercept Attack\n2 - Cyber Attack\n3 - Drone Strike\n4 - Bio Attack\n\n");
+                    strcat(GLOBAL.message, "\nEscolha a sua jogada:\n\n0 - Nuclear Attack\n1 - Intercept Attack\n2 - Cyber Attack\n3 - Drone Strike\n4 - Bio Attack\n");
                     send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
                     //printf("MSG_RESPONSE\n");
