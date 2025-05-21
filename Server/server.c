@@ -166,13 +166,13 @@ int main(int argc, char **argv)
                             sprintf(GLOBAL.message, "\nVocê escolheu: %s\nServidor escolheu: %s\nResultado: Vitória!\n\n", 
                                                                     ATTACK_TYPES[clientChoice], ATTACK_TYPES[serverChoice]);
                         }
-                        else if (resultado == 0)
+                        else if (resultado == -1)
                         {
                             //strcpy(GLOBAL.message, "Resultado: Empate!\n");
                             sprintf(GLOBAL.message, "\nVocê escolheu: %s\nServidor escolheu: %s\nResultado: Empate!\n\n", 
                                                                     ATTACK_TYPES[clientChoice], ATTACK_TYPES[serverChoice]);
                         }
-                        else if (resultado == -1)
+                        else if (resultado == 0)
                         {
                             GLOBAL.server_wins += 1;
                             //strcpy(GLOBAL.message, "Resultado: Derrota!\n");
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
                     //printf("MSG_RESULT\n");
                     //send(csock, GLOBAL.message, strlen(GLOBAL.message)+1, 0);
 
-                    if (GLOBAL.result == 0){
+                    if (GLOBAL.result == -1){
                         //recv(csock, Buffer_Receive, BUFFER_SIZE+1, 0);
                         nextAction = MSG_REQUEST;
                     }

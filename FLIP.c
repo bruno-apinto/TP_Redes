@@ -91,8 +91,8 @@ int ServerSockaddrInit(const char *proto, const char *portstr,
     
     uint16_t port = (uint16_t) atoi(portstr);
 
-    printf ("porta: %d\n", port);
-    printf("protocolo: %s\n", proto);
+    //printf ("porta: %d\n", port);
+    //printf("protocolo: %s\n", proto);
 
     if (port == 0) {
         return -1;
@@ -147,7 +147,7 @@ int PlayProcessor (int clientChoice, int jogadaServidor){
         }
         else if (jogadaServidor == 1 || jogadaServidor == 4){
             // Derrota
-            return -1;
+            return 0;
         }
         break;
 
@@ -158,7 +158,7 @@ int PlayProcessor (int clientChoice, int jogadaServidor){
         }
         else if (jogadaServidor == 2 || jogadaServidor == 3){
             // Derrota
-            return -1;
+            return 0;
         }
         break;
 
@@ -169,7 +169,7 @@ int PlayProcessor (int clientChoice, int jogadaServidor){
         }
         else if (jogadaServidor == 0 || jogadaServidor == 4){
             // Derrota
-            return -1;
+            return 0;
         }
         break;
     
@@ -180,7 +180,7 @@ int PlayProcessor (int clientChoice, int jogadaServidor){
         }
         else if (jogadaServidor == 0 || jogadaServidor == 2){
             // Derrota
-            return -1;
+            return 0;
         }
         break;
     
@@ -191,12 +191,12 @@ int PlayProcessor (int clientChoice, int jogadaServidor){
         }
         else if (jogadaServidor == 1 || jogadaServidor == 3){
             // Derrota
-            return -1;
+            return 0;
         }
         break;
 
     default:
         break;
     }
-    return 0;
+    return -1;
 }
