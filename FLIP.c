@@ -130,10 +130,8 @@ void LogExit (const char* msg){
 
 int PlayProcessor (int clientChoice, int jogadaServidor){
 
-    
-
-    printf("Servidor escolheu: %d\n", jogadaServidor);
-    printf ("Cliente escoheu: %d\n", clientChoice);
+    //printf("Servidor escolheu: %d\n", jogadaServidor);
+    //printf ("Cliente escoheu: %d\n", clientChoice);
 
     if (jogadaServidor == clientChoice){
         // Empate

@@ -19,13 +19,13 @@ void Usage (int argc, char** argv){
 
 int main (int argc, char** argv){
 
-    printf ("0\n");
+    //printf ("0\n");
 
     if (argc < 3){
         Usage(argc, argv);
     }
 
-    printf("passou 1\n");
+    //printf("passou 1\n");
 
     // Criando estrutura do socket addr
     char IP_ADDR[13];
@@ -33,7 +33,7 @@ int main (int argc, char** argv){
     char PORT[10];
     strcpy(PORT, argv[2]);
 
-    printf ("Passou 2\n");
+    //printf ("Passou 2\n");
 
     struct sockaddr_storage storage;
     if (0 != AddrParse(IP_ADDR, PORT, &storage)){
@@ -47,7 +47,7 @@ int main (int argc, char** argv){
         LogExit("Socket");
     }
 
-    printf("Passou 3\n");
+    //printf("Passou 3\n");
 
     // Tentando conexão
     struct sockaddr *addr = (struct sockaddr*) &storage;
@@ -58,7 +58,8 @@ int main (int argc, char** argv){
 
     char AddrStr[BUFFER_SIZE];
     Addr2Str(addr, AddrStr, BUFFER_SIZE);
-    printf("Connected to: %s\n", AddrStr);
+    //printf("Connected to: %s\n", AddrStr);
+    printf("Conectado ao servidor.\n");
 
     // Comunicação
     char Buffer_Receive[BUFFER_SIZE];
@@ -76,7 +77,7 @@ int main (int argc, char** argv){
         LogExit("First send");
     }*/
 
-    printf("passou 2\n");
+    //printf("passou 2\n");
 
 
     while(1){
