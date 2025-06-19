@@ -19,12 +19,21 @@ void Usage (int argc, char** argv){
 
 int main (int argc, char** argv){
 
+
+    char nickname[16];
     //printf ("0\n");
 
-    if (argc < 3){
+    if (argc < 5){
         Usage(argc, argv);
     }
 
+    if (!strcmp("-nick", argv[3])){
+        if (strlen(argv[4]) < 15){
+            strcpy(nickname, argv[4]);
+        }
+        else
+            LogExit("Nickname muito grande");
+    }
     //printf("passou 1\n");
 
     // Criando estrutura do socket addr
