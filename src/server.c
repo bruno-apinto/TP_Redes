@@ -11,8 +11,9 @@
 
 #define BUFFER_SIZE MSG_SIZE
 
-char bufferMultiplicador[BUFFER_SIZE] = "";
-float multiplicador = 0.00;
+char bufferMULTIPLIER[BUFFER_SIZE] = "";
+float MULTIPLIER = 0.00;
+int FINISH_SERVER = 0;
 
 void Usage(int argc, char **argv)
 {
@@ -35,7 +36,22 @@ int MakingConnection(int server_socket){
         LogExit("Accept");
     }
 
+    /*char caddrstr[BUFFER_SIZE];
+    Addr2Str(addr, caddrstr, BUFFER_SIZE);
+    printf("Cliente conectado.\n");*/
+
     return client_socket;
+}
+
+void LobbyConnection(int *client_sockets, int *sockets_in_use, int server_socket){
+    int i = 0;
+    while (FINISH_SERVER == 1){
+
+        if (i == 10) i = 0;
+        client_sockets[i] = MakingConnection(server_socket);
+        sockets_in_use[i] = 1;
+        i++;
+    }
 }
 
 void Broadcast(int *client_sockets, int *sockets_in_use){
@@ -45,17 +61,15 @@ void Broadcast(int *client_sockets, int *sockets_in_use){
 
         if (sockets_in_use[i] == 1){
             send(client_sockets[i], "1", strlen("1") + 1, 0);
-            send(client_sockets[i], bufferMultiplicador, strlen(bufferMultiplicador) + 1, 0);
+            send(client_sockets[i], bufferMULTIPLIER, strlen(bufferMULTIPLIER) + 1, 0);
         }
 
-        if (multiplicador == 2.00) {
-
+        if (MULTIPLIER == 2.00) {
             i = 0;
             while (i<10){
                 //estourou
                 i++;
             }
-            
             break;
         }
     }
@@ -64,9 +78,9 @@ void Broadcast(int *client_sockets, int *sockets_in_use){
 
 int main(int argc, char **argv)
 {
-    /*if (argc < 3){
+    if (argc < 3){
         Usage(argc, argv);
-    }*/
+    }
 
     //printf("passou 1\n");
     // Inicializando a interface
@@ -120,14 +134,11 @@ int main(int argc, char **argv)
             int csock[10];
 
             // thread 1
-            csock[0] = MakingConnection(s); // Estabelece conexão com um cliente
+            LobbyConnection(csock, csock_available, s); // Gestão de clientes
 
-            // thread 2
-            Broadcast(&csock_available, &csock);
+            // thread 2: operação do multiplicador e broadcast
+            Broadcast(&csock_available, &csock); // Broadcast aos clientes
 
-            char caddrstr[BUFFER_SIZE];
-            Addr2Str(addr, caddrstr, BUFFER_SIZE);
-            printf("Cliente conectado.\n");
             //printf("[log] Connection from %s\n", caddrstr);
 
             // Encerrando conexão
