@@ -11,6 +11,9 @@
 
 #define BUFFER_SIZE MSG_SIZE
 
+char bufferMultiplicador[BUFFER_SIZE] = "";
+float multiplicador = 0.00;
+
 void Usage(int argc, char **argv)
 {
     printf("Usage: %s <v4|v6> <Server PORT>\n", argv[0]);
@@ -33,6 +36,30 @@ int MakingConnection(int server_socket){
     }
 
     return client_socket;
+}
+
+void Broadcast(int *client_sockets, int *sockets_in_use){
+
+    for (int i = 0; i<=10; i++){
+        if (i == 10) i = 0;
+
+        if (sockets_in_use[i] == 1){
+            send(client_sockets[i], "1", strlen("1") + 1, 0);
+            send(client_sockets[i], bufferMultiplicador, strlen(bufferMultiplicador) + 1, 0);
+        }
+
+        if (multiplicador == 2.00) {
+
+            i = 0;
+            while (i<10){
+                //estourou
+                i++;
+            }
+            
+            break;
+        }
+    }
+
 }
 
 int main(int argc, char **argv)
@@ -95,7 +122,8 @@ int main(int argc, char **argv)
             // thread 1
             csock[0] = MakingConnection(s); // Estabelece conexão com um cliente
 
-            
+            // thread 2
+            Broadcast(&csock_available, &csock);
 
             char caddrstr[BUFFER_SIZE];
             Addr2Str(addr, caddrstr, BUFFER_SIZE);
